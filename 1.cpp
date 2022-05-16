@@ -85,26 +85,35 @@ void p_openMP()
 
 int main()
 {
-    cin>>n;  //矩阵规模
+    //cin>>n;  //矩阵规模
+    int step=10;
+    for(n=0;n<=2000;n+=step)
+    {
 	for(int i=0;i<n;i++)
 		A = new float*[n];
     for(int i=0;i<n;i++)
 		A[i] = new float[n];
+    double time_0=0.0,time_1=0.0;
     //串行算法
 	m_reset();
 	int ret=gettimeofday(&val,NULL);  
     normal();
 	ret=gettimeofday(&newval,NULL);
-	cout<<"diff:sec---"<<newval.tv_sec-val.tv_sec<<" microsec---"<<newval.tv_usec
-                            -val.tv_usec<<endl;
+	time_0+=(newval.tv_sec - val.tv_sec) + (double)(newval.tv_usec - val.tv_usec) / 1000000.0; 
 	//openMP
 	m_reset();
 	ret=gettimeofday(&val,NULL);  
     p_openMP();
 	ret=gettimeofday(&newval,NULL);
-	cout<<"diff:sec---"<<newval.tv_sec-val.tv_sec<<" microsec---"<<newval.tv_usec
-                            -val.tv_usec<<endl;
+	time_1+=(newval.tv_sec - val.tv_sec) + (double)(newval.tv_usec - val.tv_usec) / 1000000.0; 
+    cout<<"        "<<n<<"        "<<"& "<<time_0<<"   "<<"& "<<time_1<<" "<<R"(\\ \hline)"<<endl;
+    for(int i=0;i<n;i++)
+        delete A[i];
+    delete A;
+    if(n==100){step=100;}
+    if(n==1000){step=1000;}
 
+    }
 	//print_result();
 	return 0;
 } 
